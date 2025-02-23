@@ -1,0 +1,319 @@
+MDNavigationLayout:
+
+    ScreenManager:
+        name: "sm"
+        id : sm
+
+        Screen:
+            name: "mood_screen"
+            id: mood_screen
+            md_bg_color: 0, 0.6, 0.4,1
+
+            MDTopAppBar:
+
+                pos_hint: {"top": 1}
+                title:"Mood Tracker"
+                left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+
+            BoxLayout:
+                id: graph_container
+                orientation: "vertical"
+                size_hint: 1, 0.6  # Controls how much space graph takes
+                pos_hint: {"top": 0.8}  # Positioning inside parent layout
+
+        Screen:
+            name: "settings"
+            md_bg_color: app.theme_cls.bg_normal
+
+
+
+            MDBoxLayout:
+                orientation: "vertical"
+
+                # Top app bar with a menu button
+                MDTopAppBar:
+                    title: "Menu"
+                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                    elevation: 10
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    padding: "10dp"
+                    spacing: "10dp"
+
+                    Image:
+                        source: "settings.png"
+                        size_hint: None, None
+                        size: "85dp", "85dp"
+                        pos_hint: {"center_x": 0.5}
+
+                    MDLabel:
+                        text: "Settings"
+                        font_style: "H5"
+                        halign: "center"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: dp(10)
+                        padding: dp(10)
+                        md_bg_color: app.theme_cls.bg_normal
+
+                        MDIcon:
+                            icon: "theme-light-dark"
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+
+                        MDLabel:
+                            text: "Dark Mode"
+                            valign: "center"
+                            size_hint_x: 0.7
+
+                        MDSwitch:
+                            id: dark_mode_switch
+                            active: app.dark_mode
+                            on_active: app.toggle_dark_mode(self, self.active)
+                            pos_hint: {'center_y': 0.5}
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: dp(10)
+                        padding: dp(10)
+                        md_bg_color: app.theme_cls.bg_normal
+
+                        MDIcon:
+                            icon: "bell-outline"
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+
+                        MDLabel:
+                            text: "Notifications"
+                            valign: "center"
+                            size_hint_x: 0.7
+
+                        MDSwitch:
+                            id: notifications_switch
+                            active: app.notifications_enabled
+                            on_active: app.toggle_notifications(self, self.active)
+                            pos_hint: {'center_y': 0.5}
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: dp(10)
+                        padding: dp(10)
+                        md_bg_color: app.theme_cls.bg_normal
+
+                        MDIcon:
+                            icon: "palette"
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+
+                        MDLabel:
+                            text: "Select Theme"
+                            valign: "center"
+                            size_hint_x: 0.7
+
+                        MDRectangleFlatIconButton:
+                            icon: "pencil"
+                            text: "Change theme"
+                            theme_text_color: "Custom"
+                            line_color: "red"
+                            theme_icon_color: "Custom"
+                            icon_color: "orange"
+                            pos_hint: {'center_y': 0.5}
+                            on_release: app.change_theme()
+
+        Screen:
+            name: "meditation"
+
+            FloatLayout:
+                # Fixed top app bar for the meditation screen.
+                MDTopAppBar:
+                    title: "Meditation Timer"
+                    elevation: 3
+                    size_hint_y: None
+                    height: "56dp"
+                    pos_hint: {"top": 1}
+                    left_action_items: [["menu", lambda x: app.root.ids.nav_drawer.set_state("open")]]
+
+                # Meditation instructions near the top.
+                MDLabel:
+                    text: "[b]Time to Meditate"
+                    markup: True
+                    text_color: 0.2, 0.6, 0.8, 1
+                    halign: "center"
+                    font_style: "H4"
+                    size_hint: (1, None)
+                    height: "40dp"
+                    pos_hint: {"top": 0.88}
+
+                # A circular timer display using MDCard with custom canvas instructions.
+                MDCard:
+                    size_hint: (None, None)
+                    size: ("300dp", "150dp")
+
+                    pos_hint: {"center_x": 0.5, "center_y": 0.66}
+                    elevation: 4
+                    md_bg_color: 0, 0, 0, 0 #Transparent background
+                    canvas.before:
+                        # Outer rectangle (blue)
+                        Color:
+                            rgba: 0.4, 0.7, 0.7, 1
+
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(20), dp(20), dp(20), dp(20)]
+                        # Inner rectangle (purple) to create a border effect.
+                        Color:
+                            rgba: 0.8, 0.9, 0.9, 1
+                        RoundedRectangle:
+                            pos: (self.x + dp(20), self.y + dp(20))
+                            size: (self.width - dp(40), self.height - dp(40))
+                            radius: [dp(15), dp(15), dp(15), dp(15)]
+                    # The timer label is centered within the rectangular card.
+                    FloatLayout:
+                        MDLabel:
+                            id: timer_label
+                            text: "00:00"
+                            halign: "center"
+                            font_style: "H2"
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+
+                # Timer control buttons (Start & Reset) below the circle.
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: "20dp"
+
+                    size_hint: (None, None)
+                    height: "1dp"
+                    width: "200dp"
+                    pos_hint: {"center_x": 0.56, "center_y": 0.46}
+                    MDFlatButton:
+                        text: "Start"
+                        md_bg_color: 0.2, 0.4, 0.8, 1
+                        text_color: 1, 1, 1, 1
+                        on_press: app.start_timer()  # Calls the start_timer method in MeditationScreen
+                    MDFlatButton:
+                        text: "Reset"
+                        md_bg_color: 1, 0.3, 0.3, 1
+                        text_color: 1, 1, 1, 1
+                        on_press: app.stop_timer()   # Calls the stop_timer method in MeditationScreen
+
+                # Label for the meditation sound options.
+                MDLabel:
+                    text: "Choose Your Meditation Sounds"
+                    halign: "center"
+                    size_hint: (1, None)
+                    height: "40dp"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.35}
+                    font_style: "Subtitle1"
+
+                # BoxLayout containing buttons for sound selection.
+                MDGridLayout:
+                    cols: 2
+                    spacing: "10dp"
+                    size_hint: (None, None)
+                    width: "280dp"
+                    height: "140dp"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.2}
+
+                    # Each MDFillRoundFlatIconButton calls the select_sound method in MeditationScreen.
+                    MDFillRoundFlatIconButton:
+                        icon: "wave.png"
+                        text: "Ocean Waves"
+                        ripple_color: 1, 0, 0, 0.3
+                        on_press: app.select_sound("Ocean.mp3")
+                    MDFillRoundFlatIconButton:
+                        icon: "rain.png"
+                        text: "Rain Sounds"
+                        ripple_color: 1, 0, 0, 0.3
+                        on_press: app.select_sound("Rain.mp3")
+                    MDFillRoundFlatIconButton:
+                        icon: "bowl.png"
+                        text: "Tibetan Bowl"
+                        ripple_color: 1, 0, 0, 0.3
+                        on_press: app.select_sound("Bowl.mp3")
+                    MDFillRoundFlatIconButton:
+                        icon: "bonfire.png"
+                        text: "Fire Crackles"
+                        ripple_color: 1, 0, 0, 0.3
+                        on_press: app.select_sound("Bonfire.mp3")
+
+    MDNavigationDrawer:
+        enable_swiping: False if sm.current == "login_screen" or sm.current == "signup_screen" else True
+        id: nav_drawer
+
+        BoxLayout:
+            orientation: "vertical"  # Layout for items inside the drawer
+            spacing: "8dp"  # Spacing between items in the drawer
+            padding: "8dp"  # Padding for the drawer contents
+
+            # Label at the top of the navigation drawer
+            MDLabel:
+                text: "Menu"
+                font_style: "H5"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            # Menu items inside the navigation drawer, each with a respective screen to navigate to
+            MDNavigationDrawerMenu:
+
+                #menu items such as Chatbot, Mood Tracker, etc.
+                MDNavigationDrawerItem:
+                    text: "Chatbot"
+                    icon: "chatbot.png"
+                    on_press:
+                        sm.current = "chatbot_screen"  # Navigate to the meditation screen
+                        nav_drawer.set_state("close")
+
+                MDNavigationDrawerItem:
+                    text: "Mood Tracker"
+                    icon: "gauge.png"
+                    on_release: sm.current = "mood_screen"
+                    on_release: nav_drawer.set_state("close")
+
+                MDNavigationDrawerItem:
+                    text: "Habit Tracker"
+                    icon: "habits.png"
+                    on_press: nav_drawer.set_state("close")
+
+                MDNavigationDrawerItem:
+                    text: "My Journal"  # Navigate to the journal screen
+                    icon: "journal.png"
+                    on_press:
+                        #screen_manager.current = "journal"  # Navigate to the journal screen
+                        nav_drawer.set_state("close")
+
+                MDNavigationDrawerItem:
+                    text: "Meditation Timer"  # Navigate to the meditation screen
+                    icon: "meditation.png"
+                    on_release:
+                        sm.current = "meditation"  # Navigate to the meditation screen
+                        nav_drawer.set_state("close")
+
+                MDNavigationDrawerItem:
+                    text: "Settings"  # Settings item in the menu
+                    icon: "settings.png"
+                    on_press: sm.current ="settings"
+                    on_release: nav_drawer.set_state("close")
+
+                # BoxLayout at the bottom for the logout button
+                BoxLayout:
+                    size_hint_y: None
+                    height: "50dp"
+
+                # Logout item at the bottom of the drawer
+                MDNavigationDrawerItem:
+                    text: "Logout"
+                    icon: "logout.png"
+                    on_press: sm.current ="login_screen"
+                    on_press: nav_drawer.set_state("close")
+
