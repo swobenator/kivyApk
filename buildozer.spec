@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3, kivy, kivymd, kivy_garden.matplotlib, matplotlib
+requirements = python3, kivy, kivymd, kivy_garden.matplotlib, matplotlib, https://github.com/kivymd/KivyMD/archive/master.zip, materialyoucolor, exceptiongroup, asyncgui, asynckivy
 
 # (list) Garden requirements
 garden_requirements = matplotlib
