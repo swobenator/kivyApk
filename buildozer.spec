@@ -13,7 +13,7 @@ package.domain = org.test
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,mp3,wav
+source.include_exts = py,png,jpg,kv,atlas,mp3,wav,json
 
 # (list) List of inclusions using pattern matching
 source.include_patterns = sounds_folder/*.mp3
