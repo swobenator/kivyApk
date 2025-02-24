@@ -8,11 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run:
-          python -m pip install --upgrade pip setuptools wheel
-          pip install --upgrade buildozer Cython virtualenv
-          #sudo apt-get update && sudo apt-get install -y lld
+      # - name: Install dependencies
+      #   run:
+      #     python -m pip install --upgrade pip setuptools wheel
+      #     pip install --upgrade buildozer Cython virtualenv
+      #     #sudo apt-get update && sudo apt-get install -y lld
       
       - name: Build APK
         uses: digreatbrian/buildozer-action@v2
